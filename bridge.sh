@@ -7,5 +7,5 @@
 #sudo hexinject -s -i en0 > backpipe
 
 mkfifo backpipe
-node webcat.js -lwqb < backpipe
-sudo hexinject -s -i en0 > backpipe
+node webcat.js -lwqb < backpipe &
+sudo hexinject -s -i en0 -f ip > backpipe

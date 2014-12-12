@@ -71,8 +71,11 @@
 			return result;
 		}
 
-		// TODO: number, raw
 		return hex;
+	}
+
+	ext.skip = function(amount) {
+		data = data.slice(amount * 3);
 	}
 
 	var descriptor = {
@@ -83,6 +86,7 @@
 			[' ', 'ready for data', 'dataReady'],
 			['-'],
 			['r', 'get next %m.size as %m.type', 'fetch', 'byte', 'number'],
+			[' ', 'skip next %n bytes', 'skip'],
 		],
 		menus: {
 			'size': ['byte', 'short', 'int', 'MAC Address (6 octets)'],
