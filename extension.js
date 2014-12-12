@@ -29,13 +29,38 @@
 		readyForData = true;
 	};
 
+	ext.sizeToLength = function(size) {
+		if(size == 'byte') return 1;
+		if(size == 'short') return 2;
+		if(size == 'int') return 4;
+	}
+
+	ext.fetchHex = function(numBytes) {
+		var hex = data.slice(0, numBytes * 3);
+		data = data.slice(numBytes * 3);
+		return hex.trim();
+	}
+
+	ext.fetch = function(size, type) {
+		var hex = ext.fetchHex(ext.sizeToLength(size));
+		
+		// TODO: number, raw
+		return hex;
+	}
+
 	var descriptor = {
 		blocks: [
 			[' ', 'connect', 'connect'],
 			['-'],
 			['h', 'when data is available', 'when_data'],
 			[' ', 'ready for data', 'dataReady'],
-		]
+			['-'],
+			['r', 'get next %m.size as %m.type', 'fetch', 'byte', 'number'],
+		],
+		menus: {
+			'size': ['byte', 'short', 'int'],
+			'type': ['number', 'hex', 'raw'],
+		}
 	};
 
 	ScratchExtensions.register("EtherScratch", descriptor, ext);
