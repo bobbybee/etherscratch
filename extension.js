@@ -33,6 +33,7 @@
 		if(size == 'byte') return 1;
 		if(size == 'short') return 2;
 		if(size == 'int') return 4;
+		if(size == 'MAC Address (6 octets)') return 6;
 	}
 
 	ext.fetchHex = function(numBytes) {
@@ -58,7 +59,7 @@
 			['r', 'get next %m.size as %m.type', 'fetch', 'byte', 'number'],
 		],
 		menus: {
-			'size': ['byte', 'short', 'int'],
+			'size': ['byte', 'short', 'int', 'MAC Address (6 octets)'],
 			'type': ['number', 'hex', 'raw'],
 		}
 	};
