@@ -43,8 +43,34 @@
 	}
 
 	ext.fetch = function(size, type) {
-		var hex = ext.fetchHex(ext.sizeToLength(size));
+		var length = ext.sizeToLength(size);
+		var hex = ext.fetchHex(length);
 		
+		if(type == 'hex') {
+			return hex; // nothing to do
+		}
+
+		if(type == 'number') {
+			// decode as network-endian (big-endian)
+			// WARNING: due to ECMAScript logic, this will only work properly for bytes and shorts
+			// proceed with caution
+
+			return parseInt(hex.split(" ").join(''), 16);
+		}
+
+		if(type == 'raw') {
+			// TODO: look into how encodings will affect this
+
+			var result = "";
+			var hexBytes = hex.split(" ");
+
+			for(var i = 0; i < length; ++i) {
+				result += String.fromCharCode(parseInt(hexBytes[i], 16));
+			}
+
+			return result;
+		}
+
 		// TODO: number, raw
 		return hex;
 	}
