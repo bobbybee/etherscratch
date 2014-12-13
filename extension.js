@@ -1,6 +1,10 @@
 (function(ext) {
+	var socket;
+
 	var data = "";
 	var readyForData = true;
+
+	var newPacket = "";
 
 	ext._shutdown = function() {};
 	
@@ -9,7 +13,7 @@
 	};
 
 	ext.connect = function() {
-		var socket = new WebSocket("ws://localhost:8080/");
+		socket = new WebSocket("ws://localhost:8080/");
 		socket.onmessage = function(d) {
 			data += d.data.trim() + " ";
 		}
@@ -96,6 +100,17 @@
 		data = data.slice(amount * 3);
 	}
 
+	ext.add = function(size, value, type) {
+		// TODO: actually implement
+		// for now, assume hex value
+		newPacket += value + " ";
+	}
+
+	ext.flush = function() {
+		socket.send(newPacket.trim());
+		newPacket = "";
+	}
+
 	var descriptor = {
 		blocks: [
 			[' ', 'connect', 'connect'],
@@ -106,6 +121,9 @@
 			['r', 'get next %m.size as %m.type', 'fetch', 'byte', 'number'],
 			['r', 'get next blob of %n bytes as %m.blob', 'fetch_blob', 64, 'hex'],
 			[' ', 'skip next %n bytes', 'skip'],
+			['-'],
+			[' ', 'add %m.size from %s of type %m.type to packet', 'add', 'byte', 'FF', 'hex'],
+			[' ', 'flush packets', 'flush'],
 		],
 		menus: {
 			'size': ['byte', 'short', 'int', 'MAC Address (6 octets)'],
