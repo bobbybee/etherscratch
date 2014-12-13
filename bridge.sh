@@ -6,6 +6,4 @@
 #node webcat.js -lwqb < backpipe | sudo hexinject -p -i en0 &
 #sudo hexinject -s -i en0 > backpipe
 
-mkfifo backpipe
-node webcat.js -lwqb < backpipe &
-sudo hexinject -s -i en0 -f ip > backpipe
+hexinject -s -i lo0 -f "port 1337" | node webcat.js -lwqb | hexinject -p -i lo0

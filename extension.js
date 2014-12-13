@@ -12,7 +12,6 @@
 		var socket = new WebSocket("ws://localhost:8080/");
 		socket.onmessage = function(d) {
 			data += d.data.trim() + " ";
-			//console.log(d.data);
 		}
 	};
 
@@ -26,7 +25,9 @@
 	};
 
 	ext.dataReady = function() {
-		readyForData = true;
+		setTimeout(function() {
+			readyForData = true;
+		}, 100); // slight delay to fix race condition
 	};
 
 	ext.sizeToLength = function(size) {
@@ -74,6 +75,23 @@
 		return hex;
 	}
 
+	ext.fetch_blob = function(size, type) {
+		var hex = ext.fetchHex(size);
+
+		if(type == 'hex') {
+			return hex;
+		} else if(type == 'raw') {
+			var result = "";
+			var hexBytes = hex.split(" ");
+
+			for(var i = 0; i < size; ++i) {
+				result += String.fromCharCode(parseInt(hexBytes[i], 16));
+			}
+
+			return result;
+		}
+	}
+
 	ext.skip = function(amount) {
 		data = data.slice(amount * 3);
 	}
@@ -86,11 +104,13 @@
 			[' ', 'ready for data', 'dataReady'],
 			['-'],
 			['r', 'get next %m.size as %m.type', 'fetch', 'byte', 'number'],
+			['r', 'get next blob of %n bytes as %m.blob', 'fetch_blob', 64, 'hex'],
 			[' ', 'skip next %n bytes', 'skip'],
 		],
 		menus: {
 			'size': ['byte', 'short', 'int', 'MAC Address (6 octets)'],
 			'type': ['number', 'hex', 'raw'],
+			'blob': ['hex', 'raw'],
 		}
 	};
 
