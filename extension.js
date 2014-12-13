@@ -47,7 +47,7 @@
 		return hex.trim();
 	}
 
-	ext.decodeRaw = function(hex) {
+	ext.decodeRaw = function(hex, length) {
 		// TODO: look into how encodings will affect this
 
 		var result = "";
@@ -77,7 +77,7 @@
 		}
 
 		if(type == 'raw') {
-			return ext.decodeRaw(hex);
+			return ext.decodeRaw(hex, length);
 		}
 
 		return hex;
@@ -89,7 +89,7 @@
 		if(type == 'hex') {
 			return hex;
 		} else if(type == 'raw') {
-			return ext.decodeRaw(hex);
+			return ext.decodeRaw(hex, size);
 		}
 	}
 
@@ -133,6 +133,11 @@
 		newPacket = "";
 	}
 
+	ext.flush_incoming = function() {
+		data = "";
+		readyForData = true;
+	}
+
 	var descriptor = {
 		blocks: [
 			[' ', 'connect', 'connect'],
@@ -146,6 +151,7 @@
 			['-'],
 			[' ', 'add %m.size from %s of type %m.type to packet', 'add', 'byte', 'FF', 'hex'],
 			[' ', 'flush packets', 'flush'],
+			[' ', 'flush incoming buffer', 'flush_incoming'],
 		],
 		menus: {
 			'size': ['byte', 'short', 'int', 'variable (string)', 'MAC Address (6 octets)'],
