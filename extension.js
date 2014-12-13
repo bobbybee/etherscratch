@@ -148,7 +148,7 @@
 			[' ', 'flush packets', 'flush'],
 		],
 		menus: {
-			'size': ['byte', 'short', 'int', 'MAC Address (6 octets)'],
+			'size': ['byte', 'short', 'int', 'variable (string)', 'MAC Address (6 octets)'],
 			'type': ['number', 'hex', 'raw'],
 			'blob': ['hex', 'raw'],
 		}
