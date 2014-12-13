@@ -47,6 +47,19 @@
 		return hex.trim();
 	}
 
+	ext.decodeRaw = function(hex) {
+		// TODO: look into how encodings will affect this
+
+		var result = "";
+		var hexBytes = hex.split(" ");
+
+		for(var i = 0; i < length; ++i) {
+			result += String.fromCharCode(parseInt(hexBytes[i], 16));
+		}
+
+		return result;
+	}
+
 	ext.fetch = function(size, type) {
 		var length = ext.sizeToLength(size);
 		var hex = ext.fetchHex(length);
@@ -64,16 +77,7 @@
 		}
 
 		if(type == 'raw') {
-			// TODO: look into how encodings will affect this
-
-			var result = "";
-			var hexBytes = hex.split(" ");
-
-			for(var i = 0; i < length; ++i) {
-				result += String.fromCharCode(parseInt(hexBytes[i], 16));
-			}
-
-			return result;
+			return ext.decodeRaw(hex);
 		}
 
 		return hex;
@@ -85,14 +89,7 @@
 		if(type == 'hex') {
 			return hex;
 		} else if(type == 'raw') {
-			var result = "";
-			var hexBytes = hex.split(" ");
-
-			for(var i = 0; i < size; ++i) {
-				result += String.fromCharCode(parseInt(hexBytes[i], 16));
-			}
-
-			return result;
+			return ext.decodeRaw(hex);
 		}
 	}
 
