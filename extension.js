@@ -103,7 +103,25 @@
 	ext.add = function(size, value, type) {
 		// TODO: actually implement
 		// for now, assume hex value
-		newPacket += value + " ";
+		var hex = value;
+
+		if(type == 'number') {
+			var length = ext.sizeToLength(size); // get length in bytes
+			var zeroes = (new Array( (length * 2) + 1)).join("0"); // get string of zeroes for padding
+			console.log(zeroes);
+			console.log(value);
+			var rawHex = (value * 1).toString(16).toUpperCase(); // this will return something like FFF
+			console.log(rawHex);
+			hex = (zeroes + rawHex).substr( (-length * 2), (length * 2)).match(/../g).join(" "); // fix padding and inject spaces
+		}
+
+		console.log(hex);
+
+		if(type == 'raw') {
+			// TODO
+		}
+
+		newPacket += hex + " ";
 	}
 
 	ext.flush = function() {
