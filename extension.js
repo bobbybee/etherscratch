@@ -115,7 +115,14 @@
 		console.log(hex);
 
 		if(type == 'raw') {
-			// TODO
+			hex = value.split('') // array of characters
+					.map( // map a transform into hex
+						function(a) {
+							var code = a.charCodeAt(0).toString(16).toUpperCase(); // get ASCII code and convert to hex
+							code = code.length == 2 ? code : "0" + code; // add a leading zero if necessary
+							return code; // push to the output array
+						})
+					.join(" "); // convert back to space-seperated string
 		}
 
 		newPacket += hex + " ";
